@@ -3,7 +3,7 @@ from settings.base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['sephyra.kz']
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {
