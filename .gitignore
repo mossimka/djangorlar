@@ -9,3 +9,8 @@ __pycache__/
 *.pdb
 *.egg
 *.egg-info/
+
+.env
+.env.*
+*.env
+*.env.*
