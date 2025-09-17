@@ -1,4 +1,5 @@
 from settings.base import *
+from settings.config import *
 
 
 DEBUG = False
