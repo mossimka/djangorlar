@@ -1,4 +1,3 @@
-# project modules
 from decouple import config
 
 # -----------------------------------------------------------------
@@ -8,4 +7,5 @@ ENV_POSSIBLE_VALUES = [
   'prod',
 ]
 ENV_ID = config('ENV_ID', default='dev', cast=str)
-SECRET_KEY = 'django-insecure-i^f%hjuqb*qfkd86ux-a1is@(%i!)!lr7znzten#6q0_488)4v'
+
+SECRET_KEY = 'django-insecure-5+dtga7nlqs5rmeekvc^s*f+%1g5bs%3b%+83x#-91aomwd&_v'

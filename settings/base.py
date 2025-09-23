@@ -1,23 +1,17 @@
-# Python modules
 import os
 
-#project
 import settings.config as conf
 
 
-# ----------------------------------------------
-# Path
-#
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_URLCONF = 'settings.urls'
 WSGI_APPLICATION = 'settings.wsgi.application'
 ASGI_APPLICATION = 'settings.asgi.application'
 
-
-# ----------------------------------------------
+# ----------------------------------------------------------------
 # Apps
-# 
-DJANGO_AND_THIRD_PARTY_APPS = [
+# -
+DJANGO_AND_TRIRD_PARTY_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,13 +19,13 @@ DJANGO_AND_THIRD_PARTY_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-PROJECT_APPS = []
-INSTALLED_APPS = DJANGO_AND_THIRD_PARTY_APPS + PROJECT_APPS
+PROJECT_APPS = [
+]
+INSTALLED_APPS = DJANGO_AND_TRIRD_PARTY_APPS + PROJECT_APPS
 
+# ----------------------------------------------------------------
+# Middleware | Templates | Validators
 
-# ----------------------------------------------
-# Middleware | Templastes | Validator
-#
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -72,19 +66,17 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# ----------------------------------------------
+# ----------------------------------------------------------------
 # Internationalization
-#
+# -
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
 
-# ----------------------------------------------
-# Static files (CSS, JavaScript, Images)
-#
+# ----------------------------------------------------------------
+# Static files
 STATIC_URL = 'static/'
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
