@@ -20,12 +20,15 @@ DJANGO_AND_TRIRD_PARTY_APPS = [
     'django.contrib.staticfiles',
 ]
 PROJECT_APPS = [
+    'apps.users',
+    'apps.city',
+    'apps.home',
+    'apps.counter',
 ]
 INSTALLED_APPS = DJANGO_AND_TRIRD_PARTY_APPS + PROJECT_APPS
 
 # ----------------------------------------------------------------
 # Middleware | Templates | Validators
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -1,5 +1,5 @@
-from settings.base import *
-from settings.config import *
+from settings.base import *  # noqa: F403
+from settings.config import *  # noqa: F403
 
 
 DEBUG = True
