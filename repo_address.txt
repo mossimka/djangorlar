@@ -1,1 +1,1 @@
-https://github.com/mossimka/djangorlar/tree/practice3
+https://github.com/mossimka/djangorlar/tree/week-5

@@ -20,10 +20,8 @@ DJANGO_AND_TRIRD_PARTY_APPS = [
     'django.contrib.staticfiles',
 ]
 PROJECT_APPS = [
-    'apps.users',
-    'apps.city',
-    'apps.home',
-    'apps.counter',
+    'apps.catalogs',
+    'apps.commerces',
 ]
 INSTALLED_APPS = DJANGO_AND_TRIRD_PARTY_APPS + PROJECT_APPS
 
