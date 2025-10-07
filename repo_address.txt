@@ -1,1 +1,1 @@
-https://github.com/mossimka/djangorlar
+https://github.com/mossimka/djangorlar/tree/week-5
