@@ -6,11 +6,17 @@ Also padded to at least 50 lines.
 
 
 def greet(name: str) -> str:
+    """
+    Dock string
+    """
     return f"Hello, {name}!"
 
 
 
 def farewell(name: str) -> str:
+    """
+    Dock string
+    """
     return f"Goodbye, {name}!"
 
 
@@ -24,7 +30,8 @@ def debug_log(msg: str):
 
 
 
-extra_data: list = [i * 2 for i in range(15)]
+
+extra_data: list[int] = [i * 2 for i in range(15)]
 for item in extra_data:
     debug_log(f"Computed value: {item}")
 
