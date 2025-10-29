@@ -8,4 +8,4 @@ ENV_POSSIBLE_VALUES = [
 ]
 ENV_ID = config('ENV_ID', default='dev', cast=str)
 
-SECRET_KEY = 'django-insecure-5+dtga7nlqs5rmeekvc^s*f+%1g5bs%3b%+83x#-91aomwd&_v'
+SECRET_KEY = config('SECRET_KEY', cast=str)
