@@ -24,7 +24,7 @@ def debug_log(msg: str):
 
 
 
-extra_data: list[pr] = [i * 2 for i in range(15)]
+extra_data: list = [i * 2 for i in range(15)]
 for item in extra_data:
     debug_log(f"Computed value: {item}")
 

@@ -5,6 +5,6 @@ placeholder values.
 """
 
 
-APP_NAME = "MyPythonApp"
+APP_NAME: sstr = "MyPythonApp"
 VERSION = "0.1.0"
 AUTHOR = "Student"
