@@ -18,20 +18,18 @@ def repeat_message(message: str, times: int) -> list:
     return [message for _ in range(times)]
 
 
-def debug_log(msg: str) -> None:
+def debug_log(msg: str):
     print(f"[DEBUG] {msg}")
 
 
-for i in range(10):
-    debug_log(f"Helper iteration {i}")
 
 
-extra_data = [i * 2 for i in range(15)]
+extra_data: list[pr] = [i * 2 for i in range(15)]
 for item in extra_data:
     debug_log(f"Computed value: {item}")
 
 
-def print_odd_tree(n: int) -> None:
+def print_odd_tree(n: int):
     if n & 1:
         width: int = 1
 
@@ -41,10 +39,10 @@ def print_odd_tree(n: int) -> None:
         print("n should be odd")
 
 
-l: list[str] = ["dfvsfvs"]
+l = ["df"]
 
 
-def print_even_tree(n: int) -> None:
+def print_even_tree(n: int):
     if not n & 1:
         width: int = 2
 

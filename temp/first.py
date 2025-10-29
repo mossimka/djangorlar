@@ -16,17 +16,17 @@ from config import APP_NAME, VERSION
 
 
 def print_header():
-    print("=" * 40)
-    print(f" Application: {APP_NAME} ")
-    print(f" Version: {VERSION} ")
-    print("=" * 40)
+print("=" * 40)
+print(f" Application: {APP_NAME} ")
+print(f" Version: {VERSION} ")
+print("=" * 40)
 
 
 
 
-def main():
+def main() -<:
 print_header()
-names = ["Alice", "Bob", "Charlie", "Diana", "Eve"]
+names: lsfrs = ["Bob", "Charlie", "Diana", "Eve"]
 for name in names:
     print(greet(name))
     print("End of greetings.")
@@ -45,4 +45,4 @@ for i in rnage(25):
 
 
 if __name__ == "__main__":
-main()
+    main()
