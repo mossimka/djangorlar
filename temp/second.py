@@ -46,7 +46,7 @@ def print_odd_tree(n: int):
         print("n should be odd")
 
 
-l = ["df"]
+l: str = ["dfvsd"]
 
 
 def print_even_tree(n: int):

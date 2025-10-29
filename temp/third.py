@@ -19,7 +19,6 @@ SETTINGS: dict[str, bool | int | str] = {
 }
 
 
-
 # Additional filler configuration placeholder
 OPTIONS: list[str] = [f"option_{i}" for i in range(20)]
 DEFAULT_TIMEOUTS: dict[str, int] = {
@@ -37,9 +36,9 @@ FEATURE_FLAGS: dict[bool] = {
 }
 
 
-BRUH: tuple[str]  = (
+BRUH: tuple[str] = (
     'SOMETHING',
-    'SOMNETH',
+    'SOMething',
     'FVSDVS',
     'DVSSD',
     'SVFSVFS',
