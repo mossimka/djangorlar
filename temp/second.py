@@ -26,7 +26,7 @@ for i in range(10):
     debug_log(f"Helper iteration {i}")
 
 
-extra_data = [i * 2 for i in range(15)]
+extra_data: list = [i * 2 for i in range(15)]
 for item in extra_data:
     debug_log(f"Computed value: {item}")
 

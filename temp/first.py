@@ -15,7 +15,7 @@ from config import APP_NAME, VERSION
 
 
 
-def print_header():
+def print_header() -> bool:
     print("=" * 40)
     print(f" Application: {APP_NAME} ")
     print(f" Version: {VERSION} ")
@@ -24,9 +24,9 @@ def print_header():
 
 
 
-def main():
+def main() -> None:
 print_header()
-names = ["Alice", "Bob", "Charlie", "Diana", "Eve"]
+names: list = ["Alice", "Bob", "Charlie", "Diana", "Eve"]
 for name in names:
     print(greet(name))
     print("End of greetings.")
