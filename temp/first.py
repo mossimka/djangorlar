@@ -10,7 +10,6 @@ with placeholder logic so that it reaches at least
 
 
 from utils import greet
-from config import APP_NAME, VERSION
 
 
 
