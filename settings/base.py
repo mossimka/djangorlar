@@ -20,13 +20,15 @@ DJANGO_AND_TRIRD_PARTY_APPS = [
     'django.contrib.staticfiles',
 ]
 PROJECT_APPS = [
-    'apps.tasks',
-    'apps.abstract',
+    'my_apps.tasks',
+    'my_apps.abstract',
+    'my_apps.users'
 ]
 INSTALLED_APPS = DJANGO_AND_TRIRD_PARTY_APPS + PROJECT_APPS
 
 # ----------------------------------------------------------------
 # Middleware | Templates | Validators
+# - 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -65,6 +67,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+# ----------------------------------------------------------------
+# USER MODEL
+# -
+AUTH_USER_MODEL = 'users.CustomUser2'
 
 
 # ----------------------------------------------------------------
