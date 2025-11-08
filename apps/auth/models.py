@@ -4,7 +4,6 @@ from django.db.models import (
     CharField,
     EmailField,
     DateTimeField,
-    Choices,
     BooleanField,
 )
 from django.contrib.auth.models import (
@@ -124,13 +123,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, AbstractBaseModel):
     CITY_FIELD_MAX_LENGTH: int = 50
     COUNTRY_FIELD_MAX_LENGTH: int = 50
 
-    DEPARTMENT_CHOICES: dict[str, str] = Choices(
+    DEPARTMENT_CHOICES: dict[str, str] = (
         ("HR", "Human Resources"),
         ("IT", "Information Technology"),
         ("Finance", "Finance"),
         ("Marketing", "Marketing"),
     )
-    ROLES_CHOICES: dict[str, str] = Choices(
+    ROLES_CHOICES: dict[str, str] = (
         ("Admin", "Administrator"),
         ("User", "Standard User"),
         ("Manager", "Manager"),
@@ -142,6 +141,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, AbstractBaseModel):
     first_name = CharField(max_length=NAME_FIELD_MAX_LENGTH, blank=True)
     last_name = CharField(max_length=NAME_FIELD_MAX_LENGTH, blank=True)
     phone = CharField(max_length=15, blank=True, validators=[phone_validator])
+    birth_date = DateTimeField(null=True, blank=True)
     city = CharField(max_length=CITY_FIELD_MAX_LENGTH, blank=True)
     country = CharField(max_length=COUNTRY_FIELD_MAX_LENGTH, blank=True)
     department = CharField(max_length=30, blank=True, choices=DEPARTMENT_CHOICES)
@@ -151,10 +151,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, AbstractBaseModel):
     date_joined = DateTimeField(auto_now_add=True)
     last_login = DateTimeField(null=True, blank=True)
 
-    REQUIRED_FIELDS = ["username", "first_name", "last_name", "email"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "email"]
     USERNAME_FIELD = "username"
 
-    class Metadata:
+    objects = CustomUserManager()
+
+    class Meta:
         verbose_name = "Custom User"
         verbose_name_plural = "Custom Users"
         ordering = ["-date_joined"]
