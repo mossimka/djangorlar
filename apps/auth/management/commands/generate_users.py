@@ -9,49 +9,54 @@ from apps.auth.models import CustomUser
 
 
 class Command(BaseCommand):
-    help = "Generate 10000 random users for testing purposes"
+    help = "Generate 10,000 random users for testing purposes"
 
     def handle(self, *args: Any, **kwargs: dict[str, Any]):
         fake = Faker()
 
-        departments: list[str] = [
-            dept[0] for dept in CustomUser.DEPARTMENT_CHOICES
-        ]
-        roles: list[str] = [
-            role[0] for role in CustomUser.ROLES_CHOICES
-        ]
+        departments = [dept[0] for dept in CustomUser.DEPARTMENT_CHOICES]
+        roles = [role[0] for role in CustomUser.ROLES_CHOICES]
 
-        password = make_password("qwerty5")
+        BATCH_SIZE = 1000
+        TOTAL = 10000
+        password_hash = make_password("qwerty5")
 
-        users: list["CustomUser"] = []
-        for _ in range(10000):
-            first_name: str = fake.first_name()
-            last_name: str = fake.last_name()
-            username: str = (
-                f"{first_name.lower()}.{last_name.lower()}{randint(1, 9999)}"
-            )
-            email: str = f"{username}@{fake.free_email_domain()}"
-            phone: str = fake.phone_number()
-            department: str = choice(departments)
-            role: str = choice(roles)
-            birth_date = fake.date_of_birth(
-                minimum_age=19,
-                maximum_age=50,
-            )
+        users = []
+        created = 0
 
-            new_user: "CustomUser" = CustomUser(
-                email=email,
-                username=username,
-                first_name=first_name,
-                last_name=last_name,
-                phone=phone,
-                department=department,
-                role=role,
-                birth_date=birth_date,
-                password=make_password(password),
+        for i in range(TOTAL):
+            first_name = fake.first_name()
+            last_name = fake.last_name()
+            username = f"{first_name.lower()}.{last_name.lower()}{randint(1, 9999)}"
+            email = f"{username}@{fake.free_email_domain()}"
+            phone = fake.phone_number()
+            department = choice(departments)
+            role = choice(roles)
+            birth_date = fake.date_of_birth(minimum_age=19, maximum_age=50)
+
+            users.append(
+                CustomUser(
+                    email=email,
+                    username=username,
+                    first_name=first_name,
+                    last_name=last_name,
+                    phone=phone,
+                    department=department,
+                    role=role,
+                    birth_date=birth_date,
+                    password=password_hash,
+                )
             )
 
-            users.append(new_user)
+            if len(users) >= BATCH_SIZE:
+                CustomUser.objects.bulk_create(users)
+                created += len(users)
+                self.stdout.write(f"Inserted {created}/{TOTAL} users...")
+                users.clear()
 
-        CustomUser.objects.bulk_create(users)
-        print("Successfully created 10000 users.")
+        # create the remaining users
+        if users:
+            CustomUser.objects.bulk_create(users)
+            created += len(users)
+
+        self.stdout.write(self.style.SUCCESS(f"Successfully created {created} users."))
