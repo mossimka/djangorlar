@@ -1,11 +1,9 @@
+from typing import Any
+
 from django.db.models import (
-    Model,
     CharField,
     EmailField,
     DateTimeField,
-    IntegerField,
-    ForeignKey,
-    CASCADE,
     Choices,
     BooleanField,
 )
@@ -17,6 +15,102 @@ from django.contrib.auth.models import (
 
 from apps.abstract.models import AbstractBaseModel
 from apps.auth.validators import phone_validator
+
+
+class CustomUserManager(BaseUserManager):
+    """
+    Custom user manager for our custom user
+    """
+
+    def __obtain_user_instance(
+        self,
+        email: str,
+        username: str,
+        password: str,
+        first_name: str,
+        last_name: str,
+        **kwargs: dict[str, Any]
+    ) -> "CustomUser":
+        if not email:
+            raise ValueError(
+                "The Email field is required", 
+                code="email_empty",
+            )
+        if not username:
+            raise ValueError(
+                "The Username field is required", 
+                code="username_empty",
+            )
+        if not password:
+            raise ValueError(
+                "The Password field is required", 
+                code="password_empty",
+            )
+        if not first_name:
+            raise ValueError(
+                "The First Name field is required", 
+                code="first_name_empty",
+            )
+        if not last_name:
+            raise ValueError(
+                "The Last Name field is required", 
+                code="last_name_empty",
+            )
+
+        new_user = self.model(
+            email=self.normalize_email(email),
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            **kwargs,
+        )
+
+        return new_user
+    
+    def create_user(
+        self,
+        email: str,
+        username: str,
+        first_name: str,
+        last_name: str,
+        password: str,
+        **kwargs: dict[str, Any],
+    ) -> "CustomUser":
+        new_user: "CustomUser" = self.__obtain_user_instance(
+            email,
+            username,
+            first_name,
+            last_name,
+            password,
+            **kwargs,
+        )
+        new_user.set_password(password)
+        new_user.save()
+        return new_user
+    
+    def create_superuser(
+        self,
+        email: str,
+        username: str,
+        first_name: str,
+        last_name: str,
+        password: str,
+        **kwargs: dict[str, Any], 
+    ) -> "CustomUser":
+        new_user: "CustomUser" = self.__obtain_user_instance(
+            email,
+            username,
+            first_name,
+            last_name,
+            password,
+            is_staff=True,
+            is_superuser=True,
+            **kwargs
+        )
+        new_user.set_password(password)
+        new_user.save()
+        return new_user
+
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin, AbstractBaseModel):
@@ -56,4 +150,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, AbstractBaseModel):
     is_staff = BooleanField(default=False)
     date_joined = DateTimeField(auto_now_add=True)
     last_login = DateTimeField(null=True, blank=True)
-    
+
+    REQUIRED_FIELDS = ["username", "first_name", "last_name", "email"]
+    USERNAME_FIELD = "username"
+
+    class Metadata:
+        verbose_name = "Custom User"
+        verbose_name_plural = "Custom Users"
+        ordering = ["-date_joined"]
