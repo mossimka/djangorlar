@@ -12,10 +12,14 @@ from django.db.models import (
     WHEN,
     CASE,
     CharField,
+    ExpressionWrapper,
+    F,
+    DurationField,
 )
 from django.db.models.functions import (
     Concat,
     ExtractYear,
+    Now,
 )
 
 from apps.auth.models import CustomUser
@@ -156,26 +160,44 @@ CustomUser.objects.values("department").annotate(total_payroll=Sum("Salary"))
 CustomUser.objects.filter(department="IT", last_login__isnull=True)
 
 # 2.42
-CustomUser.objects.filter(country="Kazakhstan").filter(Q(city__isnull=True) | Q(city=""))
+CustomUser.objects.filter(country="Kazakhstan").filter(
+    Q(city__isnull=True) | Q(city="")
+)
 
 # 2.43
 CustomUser.objects.filter(birth_date__lt="1990-01-01", salary__isnull=False)
 
-#2.44
-#CustomUser.objects.
+# 2.44
+CustomUser.objects.annotate(
+    years_since_joined=ExpressionWrapper(
+        Now() - F("date_joined"), output_field=DurationField
+    )
+)
 
-"""
-2.44 Get all users and annotate them with years_since_joined (difference between today and date_joined in days/years — students can use ExpressionWrapper with Now()).
+# 2.45
+CustomUser.objects.filter(
+    department="Sales",
+    email_iendswith="@gmail.com",
+    salary_gt=300_000,
+)
 
-2.45 Get users whose department is "Sales" and whose email ends with @gmail.com and salary > 350000 (multiple filters).
+# 2.46
+CustomUser.objects.order_by("country", "-salary")
 
-2.46 Get all users, order them by country, and inside each country — by salary descending (multi-level ordering).
+# 2.47
+CustomUser.objects.values("role").annotate(total=Count("id")).filter(total_gt=100)
 
-2.47 Get the number of users per role (group by role), but show only roles that have more than 100 users.
+# 2.48
+CustomUser.objects.filter(last_login__lt=F("date_joined"))
 
-2.48 Get all users whose last_login is earlier than their date_joined (data inconsistency check).
+# 2.49
+CustomUser.objects.annotate(
+    is_senoir=CASE(
+        WHEN(birth_date__lt="1985-01-01", then=Value(True)), default=Value(False)
+    )
+)
 
-2.49 Get all users and annotate them with is_senior = True if birth_date is before 1985-01-01, else False.
-
-2.50 Create a query that returns departments sorted by average salary descending, but only for departments that have at least 20 users.
-"""
+# 2.50
+CustomUser.objects.values("department").annotate(
+    total=Count("id"), avg_salary=Avg("salary")
+).filter(total__gte=20).order_by("-avg_salary")
