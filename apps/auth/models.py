@@ -5,6 +5,7 @@ from django.db.models import (
     EmailField,
     DateTimeField,
     BooleanField,
+    IntegerField,
 )
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -140,6 +141,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, AbstractBaseModel):
     username = CharField(max_length=USERNAME_FIELD_MAX_LENGTH, unique=True)
     first_name = CharField(max_length=NAME_FIELD_MAX_LENGTH, blank=True)
     last_name = CharField(max_length=NAME_FIELD_MAX_LENGTH, blank=True)
+    salary = IntegerField(default=100_000)
     phone = CharField(max_length=15, blank=True, validators=[phone_validator])
     birth_date = DateTimeField(null=True, blank=True)
     city = CharField(max_length=CITY_FIELD_MAX_LENGTH, blank=True)
