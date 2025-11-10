@@ -14,11 +14,12 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **kwargs: dict[str, Any]):
         fake = Faker()
 
-        departments = [dept[0] for dept in CustomUser.DEPARTMENT_CHOICES]
-        roles = [role[0] for role in CustomUser.ROLES_CHOICES]
+        departments: list[str] = [dept[0] for dept in CustomUser.DEPARTMENT_CHOICES]
+        roles: list[str] = [role[0] for role in CustomUser.ROLES_CHOICES]
 
-        BATCH_SIZE = 1000
-        TOTAL = 10000
+        BATCH_SIZE: int = 1000
+        TOTAL: int = 10000
+        SYMBOLS: tuple[str] = ("!", "$", "^", "@", "&", "%")
         password_hash = make_password("qwerty5")
 
         users = []
@@ -27,12 +28,13 @@ class Command(BaseCommand):
         for i in range(TOTAL):
             first_name = fake.first_name()
             last_name = fake.last_name()
-            username = f"{first_name.lower()}.{last_name.lower()}{randint(1, 9999)}"
+            username = f"{first_name.lower()}.{last_name.lower()}{randint(1, 9999)}{SYMBOLS[randint(0, 5)]}"
             email = f"{username}@{fake.free_email_domain()}"
             phone = fake.phone_number()
             department = choice(departments)
             role = choice(roles)
             birth_date = fake.date_of_birth(minimum_age=19, maximum_age=50)
+            salary: int = randint(50_000, 1_000_000)
 
             users.append(
                 CustomUser(
@@ -45,6 +47,7 @@ class Command(BaseCommand):
                     role=role,
                     birth_date=birth_date,
                     password=password_hash,
+                    salary=salary,
                 )
             )
 
