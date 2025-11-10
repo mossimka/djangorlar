@@ -9,8 +9,8 @@ from django.db.models import (
     Max,
     Sum,
     Value,
-    WHEN,
-    CASE,
+    When,
+    Case,
     CharField,
     ExpressionWrapper,
     F,
@@ -70,7 +70,7 @@ CustomUser.objects.filter(
 )
 
 # 2.15
-CustomUser.objects.filter(salary__rnage=(300_000, 700_000))
+CustomUser.objects.filter(salary__range=(300_000, 700_000))
 
 # 2.16
 CustomUser.objects.filter(department__in=["IT", "HR", "Finance"])
@@ -106,7 +106,7 @@ CustomUser.objects.annotate(birth_year=ExtractYear("birth_date")).order_by("birt
 CustomUser.objects.filter(birth_date__month=5)
 
 # 2.27
-CustomUser.objects.filter(role="Manager", salary_gt=400_000)
+CustomUser.objects.filter(role="Manager", salary__gt=400_000)
 
 # 2.28
 CustomUser.objects.filter(Q(role="Employee") | Q(department="HR"))
@@ -118,7 +118,7 @@ CustomUser.objects.filter(is_active=True).values("city").annotate(total=Count("i
 CustomUser.objects.order_by("date_joined")[:10]
 
 # 2.31
-CustomUser.objects.filter(city__istartwith="A", salary_gt=300_000)
+CustomUser.objects.filter(city__istartswith="A", salary__gt=300_000)
 
 # 2.32
 CustomUser.objects.filter(Q(department__isnull=True) | Q(department=""))
@@ -141,9 +141,9 @@ CustomUser.objects.values("email").annotate(total=Count("id")).filter(total__gt=
 
 # 2.38
 CustomUser.objects.annotate(
-    salary_level=CASE(
-        WHEN(salary__lt=300_000, then=Value("low")),
-        WHEN(salary__lt=700_000, then=Value("medium")),
+    salary_level=Case(
+        When(salary__lt=300_000, then=Value("low")),
+        When(salary__lt=700_000, then=Value("medium")),
         default=Value("high"),
         output_field=CharField(),
     )
@@ -154,7 +154,7 @@ cur_year = date.today().year
 CustomUser.objects.filter(date_joined__year=cur_year)
 
 # 2.40
-CustomUser.objects.values("department").annotate(total_payroll=Sum("Salary"))
+CustomUser.objects.values("department").annotate(total_payroll=Sum("salary"))
 
 # 2.41
 CustomUser.objects.filter(department="IT", last_login__isnull=True)
@@ -177,23 +177,23 @@ CustomUser.objects.annotate(
 # 2.45
 CustomUser.objects.filter(
     department="Sales",
-    email_iendswith="@gmail.com",
-    salary_gt=300_000,
+    email__iendswith="@gmail.com",
+    salary__gt=300_000,
 )
 
 # 2.46
 CustomUser.objects.order_by("country", "-salary")
 
 # 2.47
-CustomUser.objects.values("role").annotate(total=Count("id")).filter(total_gt=100)
+CustomUser.objects.values("role").annotate(total=Count("id")).filter(total__gt=100)
 
 # 2.48
 CustomUser.objects.filter(last_login__lt=F("date_joined"))
 
 # 2.49
 CustomUser.objects.annotate(
-    is_senoir=CASE(
-        WHEN(birth_date__lt="1985-01-01", then=Value(True)), default=Value(False)
+    is_senoir=Case(
+        When(birth_date__lt="1985-01-01", then=Value(True)), default=Value(False)
     )
 )
 
