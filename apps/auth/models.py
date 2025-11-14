@@ -121,6 +121,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin, AbstractBaseModel):
     EMAIL_FIELD_MAX_LENGTH: int = 255
     USERNAME_FIELD_MAX_LENGTH: int = 50
     NAME_FIELD_MAX_LENGTH: int = 30
+    PASSWORD_FIELD_MAX_LENGTH: int = 255
     CITY_FIELD_MAX_LENGTH: int = 50
     COUNTRY_FIELD_MAX_LENGTH: int = 50
 
