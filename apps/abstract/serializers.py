@@ -3,7 +3,7 @@ from rest_framework.serializers import ModelSerializer
 from apps.auth.models import CustomUser
 
 
-class UserSerializer(ModelSerializer):
+class CustomUserForeignSerializer(ModelSerializer):
     """
     Serializer for CustomUser model.
     """

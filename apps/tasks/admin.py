@@ -1,6 +1,6 @@
 from  django.contrib.admin import register, ModelAdmin
 
-from apps.tasks.models import Project
+from apps.tasks.models import Project, Task
 
 @register(Project)
 class projectAdmin(ModelAdmin):
@@ -13,3 +13,5 @@ class projectAdmin(ModelAdmin):
     search_fields = ("name", "description")
     list_filter = ("created_at", "updated_at")
     ordering = ("-created_at",)
+
+@register(Task)

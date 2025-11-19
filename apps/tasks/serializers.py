@@ -1,20 +1,36 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
-from apps.tasks.models import Project
-from apps.abstract.serializers import UserSerializer
+from apps.tasks.models import Project, Task
+from apps.abstract.serializers import CustomUserForeignSerializer
 
 
-class ProjectListSerializer(ModelSerializer):
+class ProjectBaseSerializer(ModelSerializer):
+    """
+    Base serializer for the Project model.
+    """
+
+    author = CustomUserForeignSerializer()
+
+    class Meta:
+        """
+        Customize the ProjectBaseSerializer metadata.
+        """
+
+        model = Project
+        fields = "__all__"
+
+
+class ProjectListSerializer(ProjectBaseSerializer):
     """
     Serializer for the Project model.
     """
 
     users_count = SerializerMethodField(
         help_text="The number of users associated with the project.",
-
+        method_name="get_users_count",
     )
 
-    author = UserSerializer()
+    author = CustomUserForeignSerializer()
 
     class Meta:
         """
@@ -42,7 +58,7 @@ class ProjectListSerializer(ModelSerializer):
 
         return getattr(obj, "users_count", 0)
 
-class ProjectCreateSerializer(ModelSerializer):
+class ProjectCreateSerializer(ProjectBaseSerializer):
     """
     Serializer for creating a new Project.
     """
@@ -60,7 +76,7 @@ class ProjectCreateSerializer(ModelSerializer):
             "description",
         )
 
-class ProjectPatchSerializer(ModelSerializer):
+class ProjectPatchSerializer(ProjectBaseSerializer):
     """
     Serializer for updating an existing Project.
     """
@@ -74,4 +90,78 @@ class ProjectPatchSerializer(ModelSerializer):
         fields = (
             "name",
             "description",
+        )
+
+
+
+class TaskBaseSerializer(ModelSerializer):
+    """
+    Base serializer for the Task model.
+    """
+
+    asignee = CustomUserForeignSerializer()
+
+    class Meta:
+        """
+        Customize the TaskBaseSerializer metadata.
+        """
+
+        model = Task
+        fields = "__all__"
+
+    def get_status(self, obj: Task) -> dict[str, int | str]:
+        """
+        Get the status of the task as a dictionary.
+
+        Parameters:
+            obj (Task): The task instance.
+        Returns:
+            dict[str, str]: A dictionary containing the status of the task.
+        """
+
+        return obj.get_status_as_dict()
+
+
+class TaskListSerializer(TaskBaseSerializer):   
+    """
+    Serializer for the Task model.
+    """
+
+    assignees = CustomUserForeignSerializer(many=True)
+
+    class Meta:
+        """
+        Customize the TaskSerializer metadata.
+        """
+
+        model = Task
+        fields = (
+            "id",
+            "title",
+            "description",
+            "project",
+            "assignees",
+        )
+
+    
+class TaskCreateSerializer(TaskBaseSerializer):
+    """
+    Serializer for creating a new Task.
+    """
+
+    project: int = 
+
+    class Meta:
+        """
+        Customize the TaskCreateSerializer metadata.
+        """
+
+        model = Task
+        fields = (
+            "id",
+            "title",
+            "description",
+            "project",
+            "status",
+            "assignees",
         )
