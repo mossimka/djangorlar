@@ -1,1 +1,1 @@
-https://github.com/mossimka/djangorlar/tree/week-5
+https://github.com/mossimka/djangorlar/tree/practice-9-10-drf
