@@ -27,8 +27,6 @@ class UserLoginSerializer(Serializer):
             "password",
         )
 
-    def validate_email(self, value: str) -> str:
-        return value.lower()
 
     def validate(self, attrs: dict[str, Any]):
         email: str = attrs["email"]
