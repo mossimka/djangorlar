@@ -21,11 +21,11 @@ DJANGO_AND_TRIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "drf_spectacular",
-    "drf_yasg",
 ]
 PROJECT_APPS = [
     "apps.auth",
     "apps.abstract",
+    "apps.edu",
 ]
 INSTALLED_APPS = DJANGO_AND_TRIRD_PARTY_APPS + PROJECT_APPS
 

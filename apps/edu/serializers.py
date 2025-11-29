@@ -8,6 +8,7 @@ from rest_framework.serializers import (
     CharField,
     ModelSerializer,
     SerializerMethodField,
+    PrimaryKeyRelatedField,
 )
 
 from apps.auth.models import (
@@ -15,7 +16,7 @@ from apps.auth.models import (
     PASSWORD_FIELD_MAX_LENGTH,
     CustomUser,
 )
-from apps.auth.serializers import UserSerializer
+from apps.auth.serializers import UserInfoSerializer
 from apps.edu.models import Course, Lesson
 from apps.edu.validators import indentation_validator
 
@@ -28,7 +29,7 @@ class CourseSerializer(ModelSerializer):
     id = CharField(read_only=True)
     title = CharField(required=True, max_length=255)
     description = CharField(required=True)
-    owner = UserSerializer(read_only=True)
+    owner = UserInfoSerializer(read_only=True)
     lessons_count = SerializerMethodField()
 
     class Meta:
@@ -51,10 +52,7 @@ class LessonSerializer(ModelSerializer):
     """
 
     id = CharField(read_only=True)
-    course = CharField(
-        source="course.title",
-    )
-    description = CharField(required=True)
+    course = PrimaryKeyRelatedField(queryset=Course.objects.all(), required=True)
     title = CharField(required=True, max_length=255)
     content = CharField(required=True)
     order = IntegerField(required=True)
