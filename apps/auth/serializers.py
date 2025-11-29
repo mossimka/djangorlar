@@ -1,8 +1,6 @@
 from typing import Any, Optional
 
-from django.forms import ValidationError
-
-from rest_framework.serializers import Serializer, EmailField, CharField
+from rest_framework.serializers import Serializer, EmailField, CharField, ValidationError
 
 from apps.auth.models import EMAIL_FIELD_MAX_LENGTH, PASSWORD_FIELD_MAX_LENGTH, CustomUser
 
@@ -53,3 +51,39 @@ class UserLoginSerializer(Serializer):
         attrs["user"] = user
 
         return super().validate(attrs)
+    
+class RefreshTokenSerializer(Serializer):
+    """
+    Serializer for refreshing access token
+    """
+
+    refresh = CharField(
+        required=True,
+    )
+
+    class Meta:
+        fields = (
+            "refresh",
+        )
+
+class UserInfoSerializer(Serializer):
+    """
+    Serializer for user information
+    """
+
+    user_id = CharField(
+        read_only=True,
+    )
+    email = EmailField(
+        read_only=True,
+    )
+    username = CharField(
+        read_only=True,
+    )
+
+    class Meta:
+        fields = (
+            "user_id",
+            "email",
+            "username",
+        )

@@ -21,6 +21,7 @@ DJANGO_AND_TRIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "drf_spectacular",
+    "drf_yasg",
 ]
 PROJECT_APPS = [
     "apps.auth",
