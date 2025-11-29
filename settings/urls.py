@@ -7,6 +7,7 @@ from settings.base import MEDIA_ROOT, MEDIA_URL, STATIC_ROOT, STATIC_URL
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/auth/", include("apps.auth.urls")),
 ]
 
 urlpatterns += static(prefix=STATIC_URL, document_root=STATIC_ROOT)

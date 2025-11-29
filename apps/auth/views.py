@@ -27,7 +27,6 @@ class CustomUserViewSet(ViewSet):
     permission_classes = (AllowAny,)
 
 
-    @action(
         methods=["post",],
         detail=True,
         permission_classes=[AllowAny],
