@@ -8,7 +8,7 @@ from apps.auth.views import CustomUserViewSet
 router: DefaultRouter = DefaultRouter(trailing_slash=False)
 
 router.register(
-    prefix="auth",
+    prefix="",
     viewset=CustomUserViewSet,
     basename="user",
 )

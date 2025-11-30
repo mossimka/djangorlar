@@ -81,3 +81,19 @@ def lesson(course):
         indentation=0,
         is_published=True,
     )
+
+
+# --------------------------------------------------------------
+# Token fixtures
+
+
+@pytest.fixture
+def tokens(auth_client, user):
+    response = auth_client.post(
+        "/api/auth/v1/token",
+        data={"email": user.email, "password": "12345"},
+    )
+    return {
+        "access": response.data["access"],
+        "refresh": response.data["refresh"],
+    }
