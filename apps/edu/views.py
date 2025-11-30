@@ -11,6 +11,7 @@ from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
     HTTP_201_CREATED,
+    HTTP_403_FORBIDDEN,  # Added this import
 )
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -25,10 +26,8 @@ class CourseViewSet(ViewSet):
     View set for managing Course instances.
     """
 
-    # Добавили IsOwner, чтобы check_object_permissions работал корректно для update/destroy
     permission_classes = (IsAuthenticated, IsOwner)
 
-    # --- Добавляем для Swagger ---
     def get_serializer_class(self):
         if self.action == "lessons":
             return LessonSerializer
@@ -41,9 +40,7 @@ class CourseViewSet(ViewSet):
             return serializer_class(*args, **kwargs)
         return None
 
-    # -----------------------------
-
-    def list(self, request: Request) -> Response:  # Исправлено slef -> self
+    def list(self, request: Request) -> Response:
         courses = Course.objects.all()
 
         is_active = request.query_params.get("is_active")
@@ -153,9 +150,9 @@ class LessonViewSet(ViewSet):
     View set for managing Lesson instances.
     """
 
-    permission_classes = (IsAuthenticated,)
+    # FIX: Add IsOwner so check_object_permissions works
+    permission_classes = (IsAuthenticated, IsOwner)
 
-    # --- Добавляем для Swagger ---
     def get_serializer_class(self):
         return LessonSerializer
 
@@ -166,14 +163,13 @@ class LessonViewSet(ViewSet):
             return serializer_class(*args, **kwargs)
         return None
 
-    # -----------------------------
-
     def create(self, request: Request) -> Response:
         course_id = request.data.get("course")
         course = Course.objects.filter(id=course_id).first()
         if not course:
             return Response({"detail": "Course not found."}, status=HTTP_404_NOT_FOUND)
 
+        # This now works because IsOwner is in permission_classes
         self.check_object_permissions(request, course)
 
         first = Lesson.objects.filter(course=course).order_by("order").first()
@@ -187,7 +183,7 @@ class LessonViewSet(ViewSet):
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     @action(
-        methods=["put"],
+        methods=["post"],  # FIX: Changed from put to post to match tests
         detail=True,
     )
     def move(self, request, pk: int) -> Response:
@@ -201,9 +197,7 @@ class LessonViewSet(ViewSet):
         before_id = request.data.get("before_lesson_id")
 
         if before_id:
-            before = Lesson.objects.filter(
-                pk=before_id
-            ).first()
+            before = Lesson.objects.filter(pk=before_id).first()
             if before:
                 lesson.order = before.order - 1
         else:
@@ -229,10 +223,10 @@ class LessonViewSet(ViewSet):
 
         lesson.delete()
         return Response(status=HTTP_200_OK)
-    
+
     @action(
         methods=["post"],
-        permission_classes=[AllowAny],
+        # FIX: Removed AllowAny to enforce authentication and ownership
         detail=True,
     )
     def publish(self, request: Request, pk: int) -> Response:
@@ -240,17 +234,17 @@ class LessonViewSet(ViewSet):
             lesson = Lesson.objects.get(pk=pk)
         except Lesson.DoesNotExist:
             return Response({"detial": "Lesson not found."}, status=HTTP_404_NOT_FOUND)
-        
+
         self.check_object_permissions(request, lesson.course)
 
         lesson.is_published = True
         lesson.save()
         serializer = LessonSerializer(lesson)
         return Response(serializer.data, status=HTTP_200_OK)
-    
+
     @action(
         methods=["post"],
-        permission_classes=[AllowAny],
+        # FIX: Removed AllowAny
         detail=True,
     )
     def unpublish(self, request: Request, pk: int) -> Response:
@@ -258,7 +252,7 @@ class LessonViewSet(ViewSet):
             lesson = Lesson.objects.get(pk=pk)
         except Lesson.DoesNotExist:
             return Response({"detial": "Lesson not found."}, status=HTTP_404_NOT_FOUND)
-        
+
         self.check_object_permissions(request, lesson.course)
 
         lesson.is_published = False

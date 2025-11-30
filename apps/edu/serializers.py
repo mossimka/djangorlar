@@ -1,7 +1,5 @@
 from typing import Any, Optional
 
-from django.forms import BooleanField, IntegerField, ValidationError
-
 from rest_framework.serializers import (
     Serializer,
     EmailField,
@@ -9,6 +7,9 @@ from rest_framework.serializers import (
     ModelSerializer,
     SerializerMethodField,
     PrimaryKeyRelatedField,
+    IntegerField,
+    BooleanField,
+    ValidationError,
 )
 
 from apps.auth.models import (
@@ -55,7 +56,7 @@ class LessonSerializer(ModelSerializer):
     course = PrimaryKeyRelatedField(queryset=Course.objects.all(), required=True)
     title = CharField(required=True, max_length=255)
     content = CharField(required=True)
-    order = IntegerField(required=True)
+    order = IntegerField(read_only=True)
     indentation = IntegerField(required=True, validators=(indentation_validator,))
     is_published = BooleanField(required=True)
 
