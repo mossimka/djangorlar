@@ -67,6 +67,9 @@ class CustomUserManager(BaseUserManager):
 
         return new_user
     
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted_at__isnull=True)
+
     def create_user(
         self,
         email: str,
@@ -110,32 +113,32 @@ class CustomUserManager(BaseUserManager):
         new_user.set_password(password)
         new_user.save()
         return new_user
+    
 
+EMAIL_FIELD_MAX_LENGTH: int = 255
+USERNAME_FIELD_MAX_LENGTH: int = 50
+NAME_FIELD_MAX_LENGTH: int = 30
+PASSWORD_FIELD_MAX_LENGTH: int = 255
+CITY_FIELD_MAX_LENGTH: int = 50
+COUNTRY_FIELD_MAX_LENGTH: int = 50
+DEPARTMENT_CHOICES: dict[str, str] = (
+    ("HR", "Human Resources"),
+    ("IT", "Information Technology"),
+    ("Finance", "Finance"),
+    ("Marketing", "Marketing"),
+)
+ROLES_CHOICES: dict[str, str] = (
+    ("Admin", "Administrator"),
+    ("User", "Standard User"),
+    ("Manager", "Manager"),
+    ("Guest", "Guest User"),
+)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin, AbstractBaseModel):
     """
     Customer user model extending AbstractBaseUser and AbstractBaseModel.
     """
-
-    EMAIL_FIELD_MAX_LENGTH: int = 255
-    USERNAME_FIELD_MAX_LENGTH: int = 50
-    NAME_FIELD_MAX_LENGTH: int = 30
-    CITY_FIELD_MAX_LENGTH: int = 50
-    COUNTRY_FIELD_MAX_LENGTH: int = 50
-
-    DEPARTMENT_CHOICES: dict[str, str] = (
-        ("HR", "Human Resources"),
-        ("IT", "Information Technology"),
-        ("Finance", "Finance"),
-        ("Marketing", "Marketing"),
-    )
-    ROLES_CHOICES: dict[str, str] = (
-        ("Admin", "Administrator"),
-        ("User", "Standard User"),
-        ("Manager", "Manager"),
-        ("Guest", "Guest User"),
-    )
 
     email = EmailField(unique=True, max_length=EMAIL_FIELD_MAX_LENGTH)
     username = CharField(max_length=USERNAME_FIELD_MAX_LENGTH, unique=True)
