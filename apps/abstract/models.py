@@ -1,6 +1,7 @@
 from typing import Any
+
 from django.db.models import Model, DateTimeField, Manager
-from datetime import timezone
+from django.utils import timezone
 
 
 class SoftDeleteManager(Manager):
